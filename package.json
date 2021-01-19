@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Dominik-Hillmann/scheduli-bot#readme",
   "dependencies": {
+    "chrono-node": "^2.1.11",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0"
   }
