@@ -1,0 +1,23 @@
+{
+  "name": "scheduli-bot",
+  "version": "1.0.0",
+  "description": "A bot that can schedule a set of persons on Discord.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test-bot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dominik-Hillmann/scheduli-bot.git"
+  },
+  "author": "Dominik Hillmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dominik-Hillmann/scheduli-bot/issues"
+  },
+  "homepage": "https://github.com/Dominik-Hillmann/scheduli-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0"
+  }
+}
