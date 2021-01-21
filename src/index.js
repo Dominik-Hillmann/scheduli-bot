@@ -17,14 +17,27 @@ client.on('message', (msg) => {
     if (isBot || !calledFor) {
         return;
     }
-
+    msg.pin('Einfach so');
+    msg.react('📌')
     msg.channel.send('Das ist ein Test');
+
+    let channel = msg.channel;
+    // channel.startTyping(5);
 
     let parsedDate = chrono.parseDate(msg.content);
     console.log(parsedDate);
     if (parsedDate !== null) {
         msg.channel.send(parsedDate.toString());
     }
+    // let prescence = new 
+    client.user.setStatus('available');
+    client.user.setPresence({
+        game: {
+            name: 'with depression',
+            type: "STREAMING",
+            url: "https://www.twitch.tv/monstercat"
+        }
+    });
 });
 
 client.login(process.env.TOKEN);
