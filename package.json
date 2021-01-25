@@ -4,7 +4,7 @@
   "description": "A bot that can schedule a set of persons on Discord.",
   "main": "index.js",
   "scripts": {
-    "test": "test-bot"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
     "chrono-node": "^2.1.11",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
   }
 }
