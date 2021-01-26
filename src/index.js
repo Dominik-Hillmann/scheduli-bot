@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+const fs = require('fs');
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -9,8 +11,33 @@ console.log(process.env.TOKEN);
 console.log(chrono.parseDate('The fourth of Jul 1776'));
 
 
-client.on('ready', () => console.log('redy'));
-client.on('message', (msg) => {
+client.on('ready', () => {
+    // let prescence = new 
+    client.user.setPresence({
+        status: "online",
+        activity: {
+            name: 'the calendar 🗓️.',
+            type: "WATCHING",
+            url: "https://www.brainrain-rain.com"
+        }
+    });
+    console.log('ready');
+    console.log();
+    fs.readdirSync(".").forEach(file => {
+        console.log(file);
+    });
+    // Ausgabe der aktuell geplanten Termine.
+});
+
+
+client.on('message', msg => {
+    console.log(msg.mentions);
+    for (let mention of msg.mentions) {
+        msg.channel.send(
+            $`Das ist ein Test `
+        );
+    }
+
     let isBot = msg.author.bot;
     let calledFor = msg.content.includes('Moin');
     
@@ -29,15 +56,8 @@ client.on('message', (msg) => {
     if (parsedDate !== null) {
         msg.channel.send(parsedDate.toString());
     }
-    // let prescence = new 
-    client.user.setStatus('available');
-    client.user.setPresence({
-        game: {
-            name: 'with depression',
-            type: "STREAMING",
-            url: "https://www.twitch.tv/monstercat"
-        }
-    });
+
+    
 });
 
 client.login(process.env.TOKEN);
