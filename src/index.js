@@ -1,22 +1,30 @@
-require('dotenv').config();
+// require('dotenv').config();
+import dotenv from "dotenv";
+dotenv.config()
 
-const fs = require('fs');
+// const fs = require('fs');
+import fs from "fs";
 
-const Discord = require('discord.js');
-const client = new Discord.Client();
+import { Client } from "discord.js";
+// const Discord = require('discord.js');
+const client = new Client();
 
-const chrono = require('chrono-node');
+// const chrono = require('chrono-node');
+import chronoPkg from 'chrono-node';
+const { parseDate } = chronoPkg;
 
 console.log(process.env.TOKEN);
-console.log(chrono.parseDate('The fourth of Jul 1776'));
+console.log(parseDate('The fourth of Jul 1776'));
 
+import { Controller } from "./controller/Controller.js";
+// const Controller = require("./controller/Controller.js");
 
 client.on('ready', () => {
     // let prescence = new 
     client.user.setPresence({
         status: "online",
         activity: {
-            name: 'the calendar 🗓️.',
+            name: 'the calendar 🗓️',
             type: "WATCHING",
             url: "https://www.brainrain-rain.com"
         }
@@ -27,23 +35,32 @@ client.on('ready', () => {
         console.log(file);
     });
     // Ausgabe der aktuell geplanten Termine.
+
+    const controller = new Controller();
+    controller.createPlanningTask("test");
 });
 
 
 client.on('message', msg => {
-    console.log(msg.mentions);
-    for (let mention of msg.mentions) {
-        msg.channel.send(
-            $`Das ist ein Test `
-        );
-    }
 
     let isBot = msg.author.bot;
     let calledFor = msg.content.includes('Moin');
-    
     if (isBot || !calledFor) {
         return;
     }
+    console.log(msg.mentions.members.keys());
+    // for (let mention of msg.mentions) {
+    //     msg.channel.send(
+    //         $`Das ist ein Test `
+    //     );
+    // }
+
+    for (let id of msg.mentions.members.keys()) {
+        console.log(id);
+        msg.channel.send(`<@${id}>`)
+    }
+    
+
     msg.pin('Einfach so');
     msg.react('📌')
     msg.channel.send('Das ist ein Test');
@@ -51,7 +68,7 @@ client.on('message', msg => {
     let channel = msg.channel;
     // channel.startTyping(5);
 
-    let parsedDate = chrono.parseDate(msg.content);
+    let parsedDate = parseDate(msg.content);
     console.log(parsedDate);
     if (parsedDate !== null) {
         msg.channel.send(parsedDate.toString());

@@ -1,6 +1,7 @@
 {
   "name": "scheduli-bot",
   "version": "1.0.0",
+  "type": "module",
   "description": "A bot that can schedule a set of persons on Discord.",
   "main": "src/index.js",
   "scripts": {

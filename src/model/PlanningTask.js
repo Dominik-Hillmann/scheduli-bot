@@ -1,42 +1,41 @@
 import { 
     MessageMentions, 
-    User 
+    GuildMember
 } from "discord.js";
+import { DiscordUser } from "../model/DiscordUser.js";
+import fs from "fs";
 
-class PlanningTask {
+export class PlanningTask {
     /** The invited people to the planned meeting. */
-    meetingMembers;
-
-    static usedIds;
 
     /**
      * 
-     * @param {MessageMentions} members 
+     * @param {DiscordUser[]} members 
      */
     constructor(members) {
+        const usedIds = this.getUsedIds();
+        this.id = 1;
+        while (usedIds.contains(this.id)) {
+            this.id++;
+        }
+
         this.meetingMembers = members;
     }
 
-    /**
-     * @returns {string[]} The members' IDs.
-     */
-    getMemberIds() {
-        let memberIds = [];
-        this.meetingMembers.array.forEach(member => {
-            memberIds.push(member.id)
-        });
-
-        return memberIds;
-    }
 
     toJson() {
 
     }
 
-    static fromJson(path) {
+    static fromJson() {
 
     }
 
-}
+    getUsedIds() {
+        let ids = [];
+        fs.readdirSync(".").forEach(file => {
+            console.log(file);
+        });
+    }
 
-module.exports.PlanningTask = PlanningTask;
+}
