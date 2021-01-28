@@ -1,7 +1,4 @@
-import { 
-    MessageMentions, 
-    GuildMember
-} from "discord.js";
+
 import { DiscordUser } from "../model/DiscordUser.js";
 import fs from "fs";
 
@@ -22,28 +19,31 @@ export class PlanningTask {
         this.meetingMembers = members;
     }
 
-
-    toJson() {
-
-    }
+    toJson() { }
 
     static fromJson(path) {
-        const tasks = fs.readdirSync("./data/tasks");
-        for (let task of tasks) {
+        // let json = fs.readFileSync(path, "utf-8");
+        // return JSON.parse(json);
+        // hieraus neues Objekt
+    } 
 
-        }
+    static simpleFromJson(path) {
+        let json = fs.readFileSync(path, "utf-8");
+        return JSON.parse(json);
+    } 
 
-        const readFile = fs.readFileSync("./data/tasks/test-task.json", "utf-8");
-        console.log(readFile);  
-        console.log(JSON.parse(readFile));
-
-    }
-
+    /**
+     * Returns the IDs of all meetings in plannung.
+     * @returns {string[]} The IDs.
+     */
     getUsedIds() {
         let ids = [];
-        fs.readdirSync(".").forEach(file => {
-            console.log(file);
-        });
+        let taskFilePaths = fs.readdirSync("./data/tasks/");
+        for (let taskFilePath of taskFilePaths) {
+            let parsedJson = this.fromJson(taskFilePath);
+            ids.push(parsedJson.id);
+        }
+    
+        return ids;
     }
-
 }

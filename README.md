@@ -14,7 +14,7 @@ npm test
 ```
 
 ## Libraries
-* Jest
+* Mocha and chai
 * chrono
 * discord.js
 * dotenv
