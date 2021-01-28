@@ -19,6 +19,13 @@ console.log(parseDate('The fourth of Jul 1776'));
 import { Controller } from "./controller/Controller.js";
 // const Controller = require("./controller/Controller.js");
 
+
+
+import { PlanningTask } from "./model/PlanningTask.js";
+
+
+
+
 client.on('ready', () => {
     // let prescence = new 
     client.user.setPresence({
@@ -36,8 +43,12 @@ client.on('ready', () => {
     });
     // Ausgabe der aktuell geplanten Termine.
 
-    const controller = new Controller();
-    controller.createPlanningTask("test");
+    // const controller = new Controller();
+    // controller.createPlanningTask("test");
+
+
+    // let task = new PlanningTask([]);
+    PlanningTask.fromJson("./data/tasks/test-task.json")
 });
 
 

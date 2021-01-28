@@ -27,7 +27,15 @@ export class PlanningTask {
 
     }
 
-    static fromJson() {
+    static fromJson(path) {
+        const tasks = fs.readdirSync("./data/tasks");
+        for (let task of tasks) {
+
+        }
+
+        const readFile = fs.readFileSync("./data/tasks/test-task.json", "utf-8");
+        console.log(readFile);  
+        console.log(JSON.parse(readFile));
 
     }
 
