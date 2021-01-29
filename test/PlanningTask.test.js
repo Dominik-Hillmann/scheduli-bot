@@ -2,17 +2,28 @@
 import chai from "chai";
 const expect = chai.expect;
 
+import fs from "fs";
+// Tested modules
 import { PlanningTask } from "../src/model/PlanningTask.js"
 
 describe("Check for functionality of PlanningTask class.", () => { // describe für Gruppierungen von Tests
-    it("Should correctly read the test task", () => {
-        const readTask = PlanningTask.fromJson("./data/tasks/test-task.json");
-
+    it("Should correctly read the test task.", () => {
+        const readTask = PlanningTask.simpleFromJson("./data/tasks/test-task.json");
         expect(readTask).to.not.be.undefined;
         expect(readTask.id).to.equal(1);
-        
+        expect(readTask.timeFrames).to.not.be.undefined;
     });
     
+    it("Should correctly convert the read JSON to a PlanningTask.", () => {
+        // const task = PlanningTask.fromJson("./data/tasks/test-task.json");
+        // expect(task).to.not.be.undefined;
+        // expect(task).to.be.a("PlanningTask");
+        // expect(task.getId()).to.equal(1);
+    });
+
+    it("Should choose an ID that is not in use on creation without ID.", () => {
+
+    });
 });
 //     it("should return true", () => {
 //         //Testing a boolean
