@@ -1,6 +1,9 @@
 import { GuildMember } from "discord.js";
 
 export class DiscordUser {
+    /** The Discord ID of the user. */
+    id;
+
     /**
      * 
      * @param {string} id 
