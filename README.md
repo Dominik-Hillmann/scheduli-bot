@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.com/Dominik-Hillmann/scheduli-bot.svg?branch=main)](https://travis-ci.com/Dominik-Hillmann/scheduli-bot)
+[![Last commit](https://img.shields.io/github/last-commit/Dominik-Hillmann/scheduli-bot)](https://img.shields.io/github/last-commit/Dominik-Hillmann/scheduli-bot)
+[![repo size](https://img.shields.io/github/repo-size/Dominik-Hillmann/scheduli-bot)](https://img.shields.io/github/repo-size/Dominik-Hillmann/scheduli-bot)
+[![contains](https://img.shields.io/badge/contains-tasty%20spaghetti%20code-informational)](https://img.shields.io/badge/contains-tasty%20spaghetti%20code-informational)
 # scheduli-bot
 A bot that can schedule a set of persons on Discord.
 
