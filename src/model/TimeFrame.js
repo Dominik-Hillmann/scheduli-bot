@@ -27,10 +27,10 @@ export class TimeFrame {
         return parseInt((this.end.getTime() / 1000).toFixed(0));
     }
 
-    toJsonString() {
-        return JSON.stringify({
+    toJsonFriendly() {
+        return {
             start: this.getStartUnix(),
             end: this.getEndUnix()
-        });
+        };
     }
 }

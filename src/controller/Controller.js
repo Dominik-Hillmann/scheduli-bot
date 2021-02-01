@@ -3,6 +3,7 @@ import { Message } from "discord.js";
 // import { PlanningTask } from "../model/PlanningTask";
 import { PlanningTask } from "../model/PlanningTask.js";
 
+import fs from "fs";
 /**
  * Interacts with the model on behalf of what happens in the view.
  */
@@ -26,4 +27,8 @@ export class Controller {
     }
 
 
+    test() {
+        // console.log(fs.readdirSync('.'));
+        console.log(PlanningTask.fromJson('./data/tasks/test-task.json'));
+    }
 }

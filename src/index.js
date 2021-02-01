@@ -24,8 +24,6 @@ import { Controller } from "./controller/Controller.js";
 import { PlanningTask } from "./model/PlanningTask.js";
 
 
-
-
 client.on('ready', () => {
     // let prescence = new 
     client.user.setPresence({
@@ -41,6 +39,12 @@ client.on('ready', () => {
     fs.readdirSync(".").forEach(file => {
         console.log(file);
     });
+
+
+    const controller = new Controller();
+    controller.test();
+
+
     // Ausgabe der aktuell geplanten Termine.
 
     // const controller = new Controller();
@@ -48,7 +52,7 @@ client.on('ready', () => {
 
 
     // let task = new PlanningTask([]);
-    PlanningTask.fromJson("./data/tasks/test-task.json")
+    // PlanningTask.fromJson("./data/tasks/test-task.json")
 });
 
 
