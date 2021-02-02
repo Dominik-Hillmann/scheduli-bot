@@ -2,21 +2,27 @@ export class TimeFrame {
     
     /**
      * 
-     * @param {{start: number|Date, end: number|Date}} data 
+     * @param {{start:Date|number, end:Date|number}} data 
      */
-    constructor(data) {
-        const startType = typeof data.start;
-        const endType = typeof data.end;
+    constructor({ start, end }) {
+        const startType = typeof start;
+        const endType = typeof end;
 
-        if (startType === 'number' && endType === 'number') {
-            this.start = new Date(data.start * 1000);
-            this.end = new Date(data.end * 1000);
-        } else if (data.start instanceof Date && data.end instanceof Date) {
-            this.start = data.start;
-            this.end = data.end;
-        } else {
-            throw new TypeError('Both start and need to be numbers or Dates');
+        const startDate = startType === 'number' ? new Date(start * 1000) : start;
+        const endDate = endType === 'number' ? new Date(end * 1000) : end;
+
+        const startIsDate = startDate instanceof Date;
+        const endIsDate = endDate instanceof Date;
+        if (!startIsDate || !endIsDate) {
+            throw new TypeError(`Start date is or end date is not a date.`);
         }
+
+        if (endDate <= startDate) {
+            throw new TypeError('The end date comes before the start date.');
+        }
+
+        this.start = startDate;
+        this.end = endDate;
     }
 
     getStartUnix() {
@@ -25,6 +31,14 @@ export class TimeFrame {
 
     getEndUnix() {
         return parseInt((this.end.getTime() / 1000).toFixed(0));
+    }
+
+    getStart() {
+        return this.start;
+    }
+
+    getEnd() {
+        return this.end;
     }
 
     toJsonFriendly() {

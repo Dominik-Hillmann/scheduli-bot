@@ -1,5 +1,4 @@
-class Meeting {
-    constructor() {
-        
-    }
+
+export class Meeting {
+    
 }
