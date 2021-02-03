@@ -21,7 +21,7 @@ import { Controller } from "./controller/Controller.js";
 
 
 
-import { PlanningTask } from "./model/PlanningTask.js";
+// import { PlanningTask } from "./model/PlanningTask.js";
 
 
 client.on('ready', () => {
@@ -80,7 +80,7 @@ client.on('message', msg => {
     msg.react('📌')
     msg.channel.send('Das ist ein Test');
 
-    let channel = msg.channel;
+    // let channel = msg.channel;
     // channel.startTyping(5);
 
     let parsedDate = parseDate(msg.content);
