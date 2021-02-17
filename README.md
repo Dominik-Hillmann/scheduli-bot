@@ -7,6 +7,11 @@
 A bot that can schedule a set of persons on Discord.
 
 ## Usage
+Install the program:
+```sh
+npm install
+```
+
 Start the program:
 ```sh
 npm start
