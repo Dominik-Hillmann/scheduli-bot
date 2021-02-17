@@ -5,7 +5,7 @@
   "description": "A bot that can schedule a set of persons on Discord.",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "chmod 0777 ./node_modules/.bin/mocha && mocha",
     "start": "node src/index.js"
   },
   "repository": {
