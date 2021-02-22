@@ -52,8 +52,20 @@ describe("Check for functionality of the TimeFrame class.", () => {
         expect(frame.toJsonFriendly()).to.eql(simpleJsonObject);
     });
 
-    it('Should return the correct length of time.', () => {
+    it("Should return the correct length of time.", () => {
         const frame = new TimeFrame({ start: 300, end: 425 });
-        expect(frame.getFrameLength()).to.equal(125);
+        expect(frame.getFrameLength()).to.equal(425 - 300);
+    });
+
+    it("Should correctly return whether two TimeFrames intersect.", () => {
+        const frame1 = new TimeFrame({ start: 300, end: 400 });
+        const frame2 = new TimeFrame({ start: 200, end: 315 });
+        const frame3 = new TimeFrame({ start: 375, end: 450 });
+        const frame4 = new TimeFrame({ start: 400, end: 401 });
+
+        expect(frame1.intersectsWith(frame2)).to.be.true;
+        expect(frame1.intersectsWith(frame3)).to.be.true;
+        expect(frame3.intersectsWith(frame2)).to.not.be.true;
+        expect(frame1.intersectsWith(frame4)).to.not.be.true;
     });
 });

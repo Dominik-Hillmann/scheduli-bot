@@ -21,14 +21,26 @@ export class Scheduler {
         if (userIds.length <= 1) {
             throw new TypeError(`Need more than one user to schedule. Got ${userIds.length}.`);
         }
+        
+        // Erstmal nur die Version implementieren, die eine Überlappung in allen frames haben 
+        // möchte.
+        const keys = Object.keys(userSchedules);
+        for (let key1 of keys) {
+            for (let key2 of keys) {
+                if (key1 == key2) {
+                    continue;
+                }
 
-        // let maxIndex = 
+                const frame1 = userSchedules.get(key1);
+                const frame2 = userSchedules.get(key2);
+                if (frame1.intersectsWith(frame2)) {
 
-        // for (let i = 1; i < userIds.length; i++) {
+                } else {
 
-        // }
+                }
+            }
+        }
     }
-
 
 
 

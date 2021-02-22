@@ -41,6 +41,19 @@ export class TimeFrame {
         return this.end;
     }
 
+    getFrameLength() {
+        return Math.round((this.end - this.start) / 1000);
+    }
+
+    /**
+     * Tests whether this frame intersects with another frame.
+     * @param {TimeFrame} otherFrame The frame with which this frame possibly intersects.
+     * @returns {boolean} Whether they intersect with each other.
+     */
+    intersectsWith(otherFrame) {
+        return this.start < otherFrame.end && otherFrame.start < this.end;
+    }
+
     toJsonFriendly() {
         return {
             start: this.getStartUnix(),
