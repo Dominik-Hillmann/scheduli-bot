@@ -8,11 +8,11 @@ export class Scheduler {
     /**
      * 
      * @param {Map<string, import('./TimeFrame').TimeFrame[]>} userSchedules 
-     * @param {number} minSecsInCommon
+     * @param {number} minSecsInCommon Minimum amount of seconds of the overlap
      * @throws {TypeError} If there are schedules for only one 
      * user.
      */
-    constructor(userSchedules, minSecsInCommon = -1) {
+    constructor(userSchedules, minSecsInCommon = 0) {
         // für jede Kombination von Zeiträumen
         // Zeichne auf, wieviele Zeiträume überlappen
         // 
@@ -25,29 +25,31 @@ export class Scheduler {
         // Erstmal nur die Version implementieren, die eine Überlappung in allen frames haben 
         // möchte.
         const keys = Object.keys(userSchedules);
-        for (let key1 of keys) {
-            for (let key2 of keys) {
-                if (key1 == key2) {
-                    continue;
-                }
-
-                const frame1 = userSchedules.get(key1);
-                const frame2 = userSchedules.get(key2);
-                if (frame1.intersectsWith(frame2)) {
-
-                } else {
-
-                }
+        const firstKey = keys.pop(0);
+        this.intersectedFrame = userSchedules[firstKey];
+        for (let key of keys) {
+            const otherFrame = userSchedules[key];
+            if (!this.intersectedFrame.intersectsWith(otherFrame)) {
+                this.intersectedFrame = null;
+                break;
             }
+            
+            this.intersectedFrame = this.intersectedFrame.intersect(otherFrame);
+            const intersectLargeEnough = this.intersectedFrame.getFrameLength() > minSecsInCommon;
+            if (!intersectLargeEnough) {
+                this.intersectedFrame = null;
+                break;
+            } 
         }
     }
 
 
-
     /**
-     * @returns {number} The number of common frames found.
+     * Get the intersection of all input time frames.
+     * @returns {import('./TimeFrame').TimeFrame|null} The intersection of all time frames.
+     * Is `null`, if there is no common overlap.
      */
-    getNumCommonFrames() {
-
+    getOverlap() {
+        return this.intersectedFrame;
     }
 }

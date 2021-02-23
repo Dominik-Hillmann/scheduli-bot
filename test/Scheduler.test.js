@@ -11,6 +11,7 @@ describe('Checks for correctness of the Scheduler class.', () => {
     const frameC = new TimeFrame({ start: 4, end: 8 });
     const frameD = new TimeFrame({ start: 6, end: 7 });
     const frameE = new TimeFrame({ start: 7, end: 10 });
+    const frameF = new TimeFrame({ start: 2, end: 4 });
 
     it('Should be correctly instanciated', () => {
         const scheduler = new Scheduler({ '123': frameA, '321': frameC });
@@ -19,27 +20,51 @@ describe('Checks for correctness of the Scheduler class.', () => {
     });
 
     it('Should not find any overlaps in not overlapping frames.', () => {
-        
+        const scheduler = new Scheduler({
+            '123': frameA,
+            '321': frameE
+        });
+        expect(scheduler.getOverlap()).to.be.null;
     });
 
     it('Should find an overlap in two overlapping frames.', () => {        
-        const scheduler = new Scheduler({ '123': frameA, '321': frameB });
-        expect(scheduler.getAllOverlaps()).to.eql([ new TimeFrame({ start: 2, end: 3}) ]);
+        const scheduler = new Scheduler({ 
+            '123': frameA, 
+            '321': frameB 
+        });
+        expect(scheduler.getOverlap()).to.eql(new TimeFrame({
+            start: 2,
+            end: 3
+        }));
     });
 
-    it('Should finde the overlap of a frame within a frame.', () => {
-        const scheduler = new Scheduler({ '123': frameC, '321': frameD });
-        expect(scheduler.getAllOverlaps()).to.eql([ frameD ]);
+    it('Should find the overlap of a frame within a frame.', () => {
+        const scheduler = new Scheduler({ 
+            '123': frameC, 
+            '321': frameD 
+        });
+        expect(scheduler.getOverlap()).to.eql(frameD);
     });
 
     it('Should find overlap of three ranges.', () => {
         const scheduler = new Scheduler({
             '123': frameA,
-            '321': frameB,
-            '987': frameC
+            '234': frameB,
+            '345': frameF
         });
+        expect(scheduler.getOverlap()).to.not.be.null;
+        expect(scheduler.getOverlap()).to.eql(new TimeFrame({
+            start: 2, 
+            end: 3
+        }));
+    });
 
-        expect(scheduler.getAllOverlaps().length).to.be.gt(1);
-        // expect(scheduler.getAllOverlaps()).to.include([ new TimeFrame({ start: }) ]);
+    it("Should not find an overlap, if it is not large enough.", () => {
+        const scheduler = new Scheduler({
+            '123': frameA,
+            '234': frameB,
+            '345': frameF
+        }, 3);
+        expect(scheduler.getOverlap()).to.be.null;
     });
 });
