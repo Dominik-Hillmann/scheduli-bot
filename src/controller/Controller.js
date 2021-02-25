@@ -1,35 +1,37 @@
 /**
-  
-*/
-// const Message = require("discord.js").Message;
-// import { PlanningTask } from "../model/PlanningTask";
-import { PlanningTask } from "../model/PlanningTask.js";
-
-/**
- * Interacts with the model on behalf of what happens in the view.
+ * @class Interacts with the model on behalf of what happens in the view.
  */
 export class Controller {
-    constructor() { }
+    /**
+     * Creates a new task to look for a common time frame of the given members.
+     * @param {string[]} members The IDs of the meeting members. 
+     */
+    createPlanningTask(members) {
+        
+    }
 
-
-    detectMessageType() {
+    /**
+     * Deletes the persistent `PlanningTask` that uses the ID `id`.
+     * @param {number} id The task ID.
+     */
+    deletePlanningTask(id) {
 
     }
 
     /**
-     * @typedef {Message} Message Discord.js message.
-     * @param {import("discord.js").Message} msg The message from which to create the plan.
-     * @throws
+     * Adds a possible time frame at which a user is available for a meeting.
+     * @param {import('../model/TimeFrame.js').TimeFrame} timeFrame The time frame
+     * the user wants to add. 
      */
-    createPlanningTask(msg) {
-        let wantedMemberIds = msg.mentions.members.keys();
-        console.log(wantedMemberIds);
-        // let task = new PlanningTask(wantedMemberIds);
+    addTimeFrame(timeFrame) {
+
     }
 
+    /**
+     * Deletes a peristent reminder for a meeting.
+     * @param {number} id The reminder ID.
+     */
+    deleteReminder(id) {
 
-    test() {
-        // console.log(fs.readdirSync('.'));
-        console.log(PlanningTask.fromJson('./data/tasks/test-task.json'));
     }
 }

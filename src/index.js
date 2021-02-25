@@ -5,7 +5,7 @@ dotenv.config()
 // const fs = require('fs');
 import fs from "fs";
 
-import { Client } from "discord.js";
+import { Client, Message } from "discord.js";
 // const Discord = require('discord.js');
 const client = new Client();
 
@@ -57,7 +57,6 @@ client.on('ready', () => {
 
 
 client.on('message', msg => {
-
     let isBot = msg.author.bot;
     let calledFor = msg.content.includes('Moin');
     if (isBot || !calledFor) {
