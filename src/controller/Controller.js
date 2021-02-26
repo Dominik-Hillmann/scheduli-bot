@@ -20,10 +20,11 @@ export class Controller {
 
     /**
      * Adds a possible time frame at which a user is available for a meeting.
+     * @param {number} userId The user's ID.
      * @param {import('../model/TimeFrame.js').TimeFrame} timeFrame The time frame
      * the user wants to add. 
      */
-    addTimeFrame(timeFrame) {
+    addTimeFrame(userId, timeFrame) {
 
     }
 
