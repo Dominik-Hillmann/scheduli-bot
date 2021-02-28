@@ -27,11 +27,3 @@ npm test
 * chrono
 * discord.js
 * dotenv
-
-```
-Nachricht, Bot ist angesprochen:
-    wenn neues Meeting mit mindestens zwei Personen:
-        lege neues Meeting an mit mindestens zwei Personen
-    wenn neues Meeting mit Mitglied, dass
-
-```

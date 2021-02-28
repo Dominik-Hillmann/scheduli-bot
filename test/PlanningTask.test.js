@@ -2,14 +2,14 @@
 import chai from "chai";
 const expect = chai.expect;
 
-import fs, { write } from "fs";
+import fs from "fs";
 import { DiscordUser } from "../src/model/DiscordUser.js";
 // Tested modules
-import { PlanningTask } from "../src/model/PlanningTask.js"
+import { PlanningTask } from "../src/model/PlanningTask.js";
 import { TimeFrame } from "../src/model/TimeFrame.js";
 
 describe("Check for functionality of PlanningTask class.", () => { // describe für Gruppierungen von Tests
-    const testId = 9999999;
+    const testId = 9999899;
     const extractionTestFrame = new TimeFrame({ start: new Date("2021-05-05T21:21:00.000Z"), end: new Date("2021-05-05T23:21:00.000Z") });
     const writeTask = new PlanningTask({
         id: testId,
@@ -47,12 +47,23 @@ describe("Check for functionality of PlanningTask class.", () => { // describe f
         }));
     });
 
+    it("Should throw errors if there are no or fewer than two members specified", () => {
+        // No parameters
+        expect(() => new PlanningTask()).to.throw(TypeError);
+        // One member
+        expect(() => new PlanningTask({ members: ["321"] })).to.throw(TypeError);
+        // Zero members
+        expect(() => new PlanningTask({ members: [] })).to.throw(TypeError);
+        // Two members
+        expect(() => new PlanningTask({ members: ["321", "123" ] })).to.not.throw(TypeError);
+    });
+
     it("Should choose an ID that is not in use on creation without ID.", () => {
         const allTasksNames = fs.readdirSync("./data/tasks");
         const allIds = allTasksNames.map(name => PlanningTask.fromJson(`./data/tasks/${name}`).getId());
         
         const completlyNewTask = new PlanningTask({
-            members: ["6545432234325"]
+            members: ["6545432234325", "342342243342"]
         });
         expect(allIds).to.not.include(completlyNewTask.getId());
     });
@@ -87,4 +98,11 @@ describe("Check for functionality of PlanningTask class.", () => { // describe f
         expect(writeTask.getTimeFrames('123').length).to.equal(3);
         expect(writeTask.getTimeFrames('321').length).to.equal(1);
     });
+
+    it("Should be able to delete itself.", () => {
+        writeTask.toJson();
+        expect(fs.readdirSync("./data/tasks/")).to.include(`${testId}.json`);
+        writeTask.deleteJson();
+        expect(fs.readdirSync("./data/tasks/")).to.not.include(`${testId}.json`);
+    }); 
 });

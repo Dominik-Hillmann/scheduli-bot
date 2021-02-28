@@ -6,33 +6,33 @@ import { TimeFrame } from "./TimeFrame.js";
 /** @class Collects the wanted time frames of the user. */
 export class PlanningTask {
     /**
-     * 
-     * @param {{id: number|undefined, members: DiscordUser[], timeFrames: TimeFrame[][]}} taskData
+     * The `PlanningTask` constructor.
+     * @param {{id:number|undefined,members:DiscordUser[]|string[],timeFrames:TimeFrame[][]|undefined}} taskData 
+     * The data to construct the task. Must at least include the members.
      * @throws {TypeError}  If users and frames do not have the same length.
      */
     constructor({ id, members, timeFrames }) {
+        if (members === undefined || members.length < 2) {
+            throw new TypeError("At least two meeting members needed");
+        }
+
+        this.members = [];
+        for (let member of members) {
+            this.members.push(member instanceof DiscordUser ? member : new DiscordUser(member));
+        }
+
         if (id === undefined) {
             const usedIds = this.getUsedIds();
             this.id = 1;
             while (usedIds.includes(this.id)) {
                 this.id++;
-            }            
-
+            }
         } else {
             this.id = id;
         }
 
-
-        this.members = members;
-        
-
         if (timeFrames === undefined) {
-            /**
-             * The time frames collected or to be collected.
-             * @type {TimeFrame[]}
-             * @private
-             */
-            this.timeFrames = Array.from({length: this.members.length}).map(x => []);
+            this.timeFrames = Array.from({ length: this.members.length }).map(x => []);
         } else {
             this.timeFrames = timeFrames;
         }
@@ -60,7 +60,7 @@ export class PlanningTask {
     /**
      * Adds a time frame for a certain user.
      * @param {DiscordUser} user The user for which time frame is added.
-     * @param {TimeFrame}} timeFrame The frame to be added.
+     * @param {TimeFrame} timeFrame The frame to be added.
      * @throws {TypeError} If the user does not exist.
      */
     addTimeFrame(user, timeFrame) {
@@ -181,8 +181,7 @@ export class PlanningTask {
      * @returns {PlanningTask} The parsed task. 
      */
     static fromJson(path) {
-        const parsedJson = this.simpleFromJson(path);
-        
+        const parsedJson = this.simpleFromJson(path);        
         const users = [];
         const timeFrames = [];
         for (let userId of Object.keys(parsedJson.timeFrames)) {
@@ -200,5 +199,12 @@ export class PlanningTask {
             members: users,
             timeFrames: timeFrames
         });
+    }
+
+    /**
+     * Deletes the JSON file associated with this task.
+     */
+    deleteJson() {
+        fs.unlinkSync(`./data/tasks/${this.id}.json`);
     }
 }
