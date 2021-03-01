@@ -1,4 +1,4 @@
- import chai from "chai";
+import chai from "chai";
 const expect = chai.expect;
 import fs from "fs";
 import { Controller } from "../src/controller/Controller.js";

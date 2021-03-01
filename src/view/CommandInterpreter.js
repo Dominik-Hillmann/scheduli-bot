@@ -78,7 +78,7 @@ export class CommandInterpreter {
             const start = parseDate(writtenDate.slice(0, startIdxTo));
             const end = parseDate(writtenDate.slice(startIdxTo));
             if (start === null || end === null) {
-                throw new TypeError("Not enough informations given to parse dates.")
+                throw new TypeError("Not enough informations given to parse dates.");
             }
             
             this.controller.addTimeFrame(msg.author.id, new TimeFrame({

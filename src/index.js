@@ -5,7 +5,7 @@ dotenv.config()
 // const fs = require('fs');
 import fs from "fs";
 
-import { Client, Message } from "discord.js";
+import { Client } from "discord.js";
 // const Discord = require('discord.js');
 const client = new Client();
 
