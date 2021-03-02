@@ -167,7 +167,7 @@ export class PlanningTask {
     /**
      * 
      * @param {string} path The path.
-     * @returns {{id: number, timeFrames: Map<string, {start: number, end: number}[]>}} Simple object
+     * @returns {{id: number,timeFrames:Map<string,{start:number,end:number}[]>}} Simple object
      * that .
      */
     static simpleFromJson(path) {

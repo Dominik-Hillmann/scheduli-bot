@@ -1,6 +1,7 @@
 /**
  * @class Collects the timeout IDs. This needs to be done here because the ID
  * cannot be made persistent.
+ * This class basically exists to connect all timeout IDs to reminder IDs.
  */
 export class PendingMessages {
     /**
