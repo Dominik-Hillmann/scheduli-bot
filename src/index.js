@@ -5,8 +5,9 @@ dotenv.config()
 // const fs = require('fs');
 import fs from "fs";
 
-import { Client } from "discord.js";
-// const Discord = require('discord.js');
+import { CommandInterpreter } from "./view/CommandInterpreter.js";
+
+import { Client } from "discord.js"; 
 const client = new Client();
 
 // const chrono = require('chrono-node');
@@ -17,12 +18,6 @@ console.log(process.env.TOKEN);
 console.log(parseDate('The fourth of Jul 1776'));
 
 import { Controller } from "./controller/Controller.js";
-// const Controller = require("./controller/Controller.js");
-
-
-
-// import { PlanningTask } from "./model/PlanningTask.js";
-
 
 client.on('ready', () => {
     // let prescence = new 
@@ -42,7 +37,7 @@ client.on('ready', () => {
 
 
     const controller = new Controller();
-    controller.test();
+    // controller.test();
 
 
     // Ausgabe der aktuell geplanten Termine.
@@ -58,10 +53,8 @@ client.on('ready', () => {
 
 client.on('message', msg => {
     let isBot = msg.author.bot;
-    let calledFor = msg.content.includes('Moin');
-    if (isBot || !calledFor) {
-        return;
-    }
+    // let calledFor = msg.content.includes('Moin');
+    if (isBot) return;
     console.log(msg.mentions.members.keys());
     // for (let mention of msg.mentions) {
     //     msg.channel.send(
@@ -79,6 +72,26 @@ client.on('message', msg => {
     msg.react('📌')
     msg.channel.send('Das ist ein Test');
 
+    const controller = new Controller();
+    const interpreter = new CommandInterpreter(controller);
+    
+    let re;
+    try {
+        re = interpreter.handle(msg);
+    } catch (e) {
+        if (e instanceof TypeError) {
+            msg.reply(e.message);
+        }
+    }
+
+    if (re !== undefined) {
+        // Did not change model
+        msg.channel.send(re);
+    } else {
+
+        // did change the model
+    }
+
     // let channel = msg.channel;
     // channel.startTyping(5);
 
@@ -88,6 +101,24 @@ client.on('message', msg => {
         msg.channel.send(parsedDate.toString());
     }
 
+
+    const id = msg.channel.id;
+    client.channels.fetch(id);
+    console.log("Nachricht", msg.channel.id);
+    console.log("ID", id);
+    client.channels.fetch(id).then(channel => console.log("Fetch", channel.id));
+    // console.log("Fetch", chan);
+
+
+
+
+
+
+
+
+
+
+    
     
 });
 

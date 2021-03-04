@@ -35,14 +35,18 @@ export class Reminder {
 
         this.time = time instanceof Date ? time : new Date(time * 1000);
     }
-
     
+    /**
+     * Schedules the reminder message.
+     * @param {import("discord.js").Client} client The Discord client. 
+     * @returns {"The timeout ID"} The ID as returned by `setTimeout`.
+     */
     schedule() {
         const currentTimeUnix = Reminder.getCurrentTimeUnix();
         const secsToMsg = this.getTimeUnix() - currentTimeUnix;
-        const timeoutId = setTimeout(() => {
+        const timeoutId = setTimeout(client => {
             return; // TODO
-        }, secsToMsg * 1000);
+        }, secsToMsg, this.client);
 
         return timeoutId;
         // Idee, um die TimeOut zu storen: neues Objekt, das übergeben werden muss:
@@ -73,8 +77,6 @@ export class Reminder {
     static getCurrentTimeUnix() {
         return parseInt((new Date().getTime() / 1000).toFixed(0));
     }
-
-
 
     /**
      * 

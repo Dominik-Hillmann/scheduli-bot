@@ -22,14 +22,14 @@ describe("Check for functionality of PlanningTask class.", () => { // describe f
     });
 
     it("Should correctly read the test task.", () => {
-        const readTask = PlanningTask.simpleFromJson("./data/tasks/test-task.json");
+        const readTask = PlanningTask.simpleFromJson("./data/tasks/test-task-1.json");
         expect(readTask).to.not.be.undefined;
         expect(readTask.id).to.equal(1);
         expect(readTask.timeFrames).to.not.be.undefined;
     });
     
     it("Should correctly convert the read JSON to a PlanningTask.", () => {
-        const task = PlanningTask.fromJson("./data/tasks/test-task.json");
+        const task = PlanningTask.fromJson("./data/tasks/test-task-1.json");
         expect(task).to.not.be.undefined;
         expect(task.getId()).to.equal(1);
         const userIds = task.getUsers().map(user => user.getId());
@@ -76,7 +76,7 @@ describe("Check for functionality of PlanningTask class.", () => { // describe f
     });
 
     it("Should correctly tell you whether all users have a time frame assigned", () => {
-        expect(PlanningTask.fromJson("./data/tasks/test-task.json").allFramesCollected()).to.equal(true);
+        expect(PlanningTask.fromJson("./data/tasks/test-task-1.json").allFramesCollected()).to.equal(true);
         expect(writeTask.allFramesCollected()).to.equal(false);
     });
 

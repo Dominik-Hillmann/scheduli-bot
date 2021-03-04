@@ -46,11 +46,17 @@ describe("Checks whether the Reminder class works correctly.", () => {
         expect(pendingMsgs.getReminderIds()).to.include(timeOutReminder.getId());
         expect(pendingMsgs.get(timeOutReminder.getId())).to.not.be.undefined;
         expect(pendingMsgs.get(timeOutReminder.getId())).to.not.be.null;
+
+        pendingMsgs.destroyAll();
     });
 
     it("Should destroy a reminder.", () => {
+        const now = new Date();
+        const plusFewSecs = new Date();
+        plusFewSecs.setSeconds(now.getSeconds() + 5);
+
         const timeOutReminder = new Reminder({
-            time: 1748228405,
+            time: plusFewSecs,
             members: ["123", "321"]
         });
 
@@ -58,8 +64,9 @@ describe("Checks whether the Reminder class works correctly.", () => {
         expect(pendingMsgs.getReminderIds()).to.include(timeOutReminder.getId());
         pendingMsgs.destroy(timeOutReminder.getId());
         expect(pendingMsgs.getReminderIds()).to.not.include(timeOutReminder.getId());
-
     });
+
+    it("Should trigger message after interval.");
 
     it("Should correctly write the reminder to disk.", () => {
         const toBeSavedReminder = new Reminder({
@@ -75,6 +82,6 @@ describe("Checks whether the Reminder class works correctly.", () => {
     });
 
     it("Should correctly read a reminder from disk.", () => {
-        expect(Reminder.fromJson("test-reminder.json")).to.eql(testReminder);
+        expect(Reminder.fromJson("test-reminder-1.json")).to.eql(testReminder);
     });
 });

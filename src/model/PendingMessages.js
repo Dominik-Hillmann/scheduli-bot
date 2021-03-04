@@ -6,8 +6,10 @@
 export class PendingMessages {
     /**
      * The constructor.
+     * @param {import("discord.js").Client} client The discord client. 
      */
-    constructor() {
+    constructor(client) {
+        this.client = client;
         this.timeouts = {};
     }
     
@@ -16,16 +18,21 @@ export class PendingMessages {
      * @param {import('./Reminder.js').Reminder} reminder The reminder.
      */
     add(reminder) {
-        this.timeouts[reminder.getId()] = reminder.schedule();
+        this.timeouts[reminder.getId()] = reminder.schedule(this.client);
     }
 
+    /**
+     * Destroys the timeout of the `Reminder` with ID `id`.
+     * @param {number} id The ID.
+     */
     destroy(id) {
-        const availableIds = this.getReminderIds(); 
+        const availableIds = this.getReminderIds();
+        id = typeof id === "string" ? parseInt(id) : id;
         if (!availableIds.includes(id)) {
             throw new TypeError(`Did not find ID ${id}. Available are ${availableIds.join(", ")}.`);
         }
-
         clearTimeout(this.get(id));
+        delete this.timeouts[id];
     }
 
     /**
@@ -43,5 +50,12 @@ export class PendingMessages {
      */
     getReminderIds() {
         return Object.keys(this.timeouts).map(id => parseInt(id));
+    }
+
+    /**
+     * Destroys all reminders.
+     */
+    destroyAll() {
+        Object.keys(this.timeouts).forEach(id => this.destroy(id));
     }
 }
