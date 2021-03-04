@@ -17,12 +17,12 @@ export class Reminder {
         if (id === undefined) {
             const usedIds = this.getUsedIds();
             let proposedId = 1;
-            while (usedIds.includes(`${proposedId}`)) {
+            while (usedIds.includes(proposedId)) {
                 proposedId++;
             }
             this.id = proposedId;
         } else {
-            this.id = id instanceof String ? id : `${id}`;
+            this.id = id instanceof String ? parseInt(id) : id;
         }
 
         if (members === undefined || time === undefined) {
@@ -33,28 +33,34 @@ export class Reminder {
             this.members.push(member instanceof DiscordUser ? member : new DiscordUser(member));
         });
 
-        this.time = time instanceof Date ? time : new Date(time);
+        this.time = time instanceof Date ? time : new Date(time * 1000);
     }
 
-    /**
-     * 
-     * @param {import('./PendingMessages.js').PendingMessages} pendingMessages 
-     * The object that registers new Timeouts.
-     */
-    schedule(pendingMessages) {
-            // Idee, um die TimeOut zu storen: neues Objekt, das übergeben werden muss:
+    
+    schedule() {
+        const currentTimeUnix = Reminder.getCurrentTimeUnix();
+        const secsToMsg = this.getTimeUnix() - currentTimeUnix;
+        const timeoutId = setTimeout(() => {
+            return; // TODO
+        }, secsToMsg * 1000);
+
+        return timeoutId;
+        // Idee, um die TimeOut zu storen: neues Objekt, das übergeben werden muss:
         // als Map ID auf TimeOut
         // Timeout ID: https://stackoverflow.com/questions/3627502/how-can-i-show-a-list-of-every-thread-running-spawned-by-settimeout-setinterval
         // https://stackoverflow.com/questions/47548081/send-scheduled-message
     }
 
-    
+    /**
+     * Get all the used IDs of the `Reminder` files.
+     * @returns {number[]} The used IDs.
+     */
     getUsedIds() {
         let ids = [];
         let taskFilePaths = fs.readdirSync(this.remindersDir);
         for (let taskFilePath of taskFilePaths) {
             let parsedJson = Reminder.fromJson(taskFilePath);
-            ids.push(parsedJson.id);
+            ids.push(parseInt(parsedJson.id));
         }
     
         return ids;
@@ -63,6 +69,12 @@ export class Reminder {
     getTimeUnix() {
         return parseInt((this.time.getTime() / 1000).toFixed(0));
     }
+
+    static getCurrentTimeUnix() {
+        return parseInt((new Date().getTime() / 1000).toFixed(0));
+    }
+
+
 
     /**
      * 
@@ -114,6 +126,8 @@ export class Reminder {
      * @returns {number} The ID.
      */
     getId() {
+        // console.log(this.id instanceof String, this.id);
+        // return this.id instanceof String ? parseInt(this.id) : this.id;
         return this.id;
     }
 

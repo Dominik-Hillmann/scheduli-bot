@@ -13,11 +13,19 @@ export class PendingMessages {
     
     /**
      * Adds a new timeout ID.
-     * @param {string|number} id The `Reminder` ID.
-     * @param {"ID returned by setTimeout"} timeoutId The ID of the time, returned by `setTimeout`.
+     * @param {import('./Reminder.js').Reminder} reminder The reminder.
      */
-    add(id, timeoutId) {
-        this.timeouts[id] = timeoutId;
+    add(reminder) {
+        this.timeouts[reminder.getId()] = reminder.schedule();
+    }
+
+    destroy(id) {
+        const availableIds = this.getReminderIds(); 
+        if (!availableIds.includes(id)) {
+            throw new TypeError(`Did not find ID ${id}. Available are ${availableIds.join(", ")}.`);
+        }
+
+        clearTimeout(this.get(id));
     }
 
     /**
@@ -31,9 +39,9 @@ export class PendingMessages {
 
     /**
      * Get all the IDs of the reminders that are registered.
-     * @returns {string[]} The IDs of the registered reminders.
+     * @returns {number[]} The IDs of the registered reminders.
      */
     getReminderIds() {
-        return Object.keys(this.timeouts);
+        return Object.keys(this.timeouts).map(id => parseInt(id));
     }
 }

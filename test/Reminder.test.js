@@ -1,6 +1,7 @@
 import chai from "chai";
 const expect = chai.expect;
 import fs from "fs";
+import { PendingMessages } from "../src/model/PendingMessages.js";
 import { Reminder } from "../src/model/Reminder.js";
 
 describe("Checks whether the Reminder class works correctly.", () => {
@@ -8,16 +9,17 @@ describe("Checks whether the Reminder class works correctly.", () => {
 
     const testReminder = new Reminder({
         id: 1,
-        time: 1614712058,
+        time: 1614722506,
         members: ["123", "312", "987"]
     });
+
+    const pendingMsgs = new PendingMessages();
 
     /**
      * Deleted the reminder.
      * @param {number|string} id The ID.
      */
     const deleteReminder = id => {
-        console.log(`./data/reminders/${id}.json`);
         fs.unlinkSync(`./data/reminders/${id}.json`);
     };
 
@@ -34,9 +36,30 @@ describe("Checks whether the Reminder class works correctly.", () => {
         expect(currentReminderIds).to.not.include(createdReminder.getId());
     });
 
-    it("Should correctly create reminder.");
+    it("Should correctly create reminder.", () => {
+        const timeOutReminder = new Reminder({
+            time: 1748228405,
+            members: ["123", "321"]
+        });
 
-    it("Should destroy a reminder.");
+        pendingMsgs.add(timeOutReminder);
+        expect(pendingMsgs.getReminderIds()).to.include(timeOutReminder.getId());
+        expect(pendingMsgs.get(timeOutReminder.getId())).to.not.be.undefined;
+        expect(pendingMsgs.get(timeOutReminder.getId())).to.not.be.null;
+    });
+
+    it("Should destroy a reminder.", () => {
+        const timeOutReminder = new Reminder({
+            time: 1748228405,
+            members: ["123", "321"]
+        });
+
+        pendingMsgs.add(timeOutReminder);
+        expect(pendingMsgs.getReminderIds()).to.include(timeOutReminder.getId());
+        pendingMsgs.destroy(timeOutReminder.getId());
+        expect(pendingMsgs.getReminderIds()).to.not.include(timeOutReminder.getId());
+
+    });
 
     it("Should correctly write the reminder to disk.", () => {
         const toBeSavedReminder = new Reminder({
@@ -47,7 +70,6 @@ describe("Checks whether the Reminder class works correctly.", () => {
         const id = toBeSavedReminder.getId();
         expect(fs.readdirSync(remindersDir)).to.not.include(`${id}.json`);
         toBeSavedReminder.toJson();
-        expect(fs.readdirSync(remindersDir)).to.include(`${id}.json`);
         expect(Reminder.fromJson(`${id}.json`)).to.eql(toBeSavedReminder);
         deleteReminder(toBeSavedReminder.getId());
     });
