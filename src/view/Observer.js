@@ -1,4 +1,5 @@
 import fs from "fs";
+import { PlanningTask } from "../model/PlanningTask";
 
 /**
  * @class After a certain is action of the `controller` is finished,
@@ -7,8 +8,9 @@ import fs from "fs";
  */
 export class Observer {
     constructor() {
-        this.latestReminders = {};
-        this.latestTasks = {};
+        this.latestReminderNames;
+        this.latestTaskNames;
+        this.latestTasks;
         this.previouslyObserved = false;
 
         this.remindersDir = "./data/reminders/";
@@ -17,7 +19,14 @@ export class Observer {
 
     observe() {
         if (!this.previouslyObserved) {
+            this.latestTasksNames = fs.readdirSync(this.tasksDir);
+            this.latestTasksNames.forEach(taskName => {
+                this.latestTasks[taskName] = PlanningTask.fromJson(this.tasksDir + taskName);
+            });
             
+            this.latestReminderNames = fs.readdirSync(this.remindersDir);
+
+
         }
 
         // ...

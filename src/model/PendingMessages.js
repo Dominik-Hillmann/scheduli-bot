@@ -7,8 +7,14 @@ export class PendingMessages {
     /**
      * The constructor.
      * @param {import("discord.js").Client} client The discord client. 
+     * @param {string} targetChannelId The channel to which the reminders will be
+     * posted.
      */
-    constructor(client) {
+    constructor(client, targetChannelId) {
+        if (client === undefined) {
+            throw new TypeError("Discord client needed to send messages.");
+        }
+        this.targetChannelId = targetChannelId;
         this.client = client;
         this.timeouts = {};
     }
@@ -18,7 +24,7 @@ export class PendingMessages {
      * @param {import('./Reminder.js').Reminder} reminder The reminder.
      */
     add(reminder) {
-        this.timeouts[reminder.getId()] = reminder.schedule(this.client);
+        this.timeouts[reminder.getId()] = reminder.schedule(this.client, this.targetChannelId);
     }
 
     /**

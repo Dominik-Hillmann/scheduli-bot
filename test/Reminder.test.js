@@ -1,8 +1,13 @@
 import chai from "chai";
 const expect = chai.expect;
+
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config()
+
 import { PendingMessages } from "../src/model/PendingMessages.js";
 import { Reminder } from "../src/model/Reminder.js";
+
 
 describe("Checks whether the Reminder class works correctly.", () => {
     const remindersDir = "./data/reminders/";
@@ -13,7 +18,13 @@ describe("Checks whether the Reminder class works correctly.", () => {
         members: ["123", "312", "987"]
     });
 
-    const pendingMsgs = new PendingMessages();
+    const mockClient = {
+        msgSent: false,
+        channels: {
+            
+        }
+    };
+    const pendingMsgs = new PendingMessages(mockClient, process.env.REMINDER_CHANNEL_ID);
 
     /**
      * Deleted the reminder.

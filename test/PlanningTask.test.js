@@ -104,5 +104,7 @@ describe("Check for functionality of PlanningTask class.", () => { // describe f
         expect(fs.readdirSync("./data/tasks/")).to.include(`${testId}.json`);
         writeTask.deleteJson();
         expect(fs.readdirSync("./data/tasks/")).to.not.include(`${testId}.json`);
-    }); 
+    });
+
+    it("Should delete task and create reminder on completion.");
 });

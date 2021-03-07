@@ -1,7 +1,7 @@
 import { DiscordUser } from "./DiscordUser.js";
+import { MessageEmbed } from "discord.js";
 import { FileNotFoundError } from "./FileNotFoundError.js";
 import fs from "fs";
-import { use } from "chai";
 
 /**
  * @class The scheduled meeting that will remind participants.
@@ -38,15 +38,27 @@ export class Reminder {
     
     /**
      * Schedules the reminder message.
-     * @param {import("discord.js").Client} client The Discord client. 
+     * @param {import("discord.js").Client} client The Discord client.
+     * @param {string} targetChannelId The target ID of the channel. 
      * @returns {"The timeout ID"} The ID as returned by `setTimeout`.
      */
-    schedule() {
+    schedule(client, targetChannelId) {
         const currentTimeUnix = Reminder.getCurrentTimeUnix();
         const secsToMsg = this.getTimeUnix() - currentTimeUnix;
-        const timeoutId = setTimeout(client => {
-            return; // TODO
-        }, secsToMsg, this.client);
+
+        const timeoutId = setTimeout((client, targetChannelId) => {
+            client.channels.fetch(targetChannelId).then(channel => {
+                const reminderMsg = new MessageEmbed()
+                .setTitle("Reminder")
+                .setDescription("You have an upcoming meeting.")
+                .addFields(this.members.map(member => ({
+                    name: member.getMention(),
+                    value: "You have an upcoming meeting."
+                })));
+
+                channel.send(reminderMsg);
+            });
+        }, secsToMsg, client, targetChannelId);
 
         return timeoutId;
         // Idee, um die TimeOut zu storen: neues Objekt, das übergeben werden muss:
