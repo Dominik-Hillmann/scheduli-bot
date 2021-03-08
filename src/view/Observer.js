@@ -8,9 +8,9 @@ import { PlanningTask } from "../model/PlanningTask";
  */
 export class Observer {
     constructor() {
-        this.latestReminderNames;
-        this.latestTaskNames;
-        this.latestTasks;
+        this.latestReminderNames = undefined;
+        this.latestTaskNames = undefined;
+        this.latestTasks = undefined;
         this.previouslyObserved = false;
 
         this.remindersDir = "./data/reminders/";

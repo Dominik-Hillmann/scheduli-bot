@@ -44,7 +44,7 @@ export class Reminder {
      */
     schedule(client, targetChannelId) {
         const currentTimeUnix = Reminder.getCurrentTimeUnix();
-        const secsToMsg = this.getTimeUnix() - currentTimeUnix;
+        const secsToMsg = (this.getTimeUnix() - currentTimeUnix) * 1000; // in milliseconds
 
         const timeoutId = setTimeout((client, targetChannelId) => {
             client.channels.fetch(targetChannelId).then(channel => {
@@ -53,18 +53,15 @@ export class Reminder {
                 .setDescription("You have an upcoming meeting.")
                 .addFields(this.members.map(member => ({
                     name: member.getMention(),
-                    value: "You have an upcoming meeting."
+                    value: "You have an upcoming meeting. " + member.getMention(),
+                    inline: true
                 })));
-
+                
                 channel.send(reminderMsg);
             });
         }, secsToMsg, client, targetChannelId);
 
         return timeoutId;
-        // Idee, um die TimeOut zu storen: neues Objekt, das übergeben werden muss:
-        // als Map ID auf TimeOut
-        // Timeout ID: https://stackoverflow.com/questions/3627502/how-can-i-show-a-list-of-every-thread-running-spawned-by-settimeout-setinterval
-        // https://stackoverflow.com/questions/47548081/send-scheduled-message
     }
 
     /**

@@ -18,14 +18,42 @@ describe("Checks whether the Reminder class works correctly.", () => {
         members: ["123", "312", "987"]
     });
 
-    const mockClient = {
-        msgSent: false,
-        channels: {
-            
-        }
-    };
-    const pendingMsgs = new PendingMessages(mockClient, process.env.REMINDER_CHANNEL_ID);
 
+    class MockClient {
+        constructor(channel) {
+            this.channels = new MockChannelManager(channel); 
+        }
+    }
+
+    class MockChannelManager {
+        constructor(channel) {
+            this.channel = channel;
+        }
+        
+        fetch(id) {
+            return new Promise((resolve, reject) => {
+                try {
+                    resolve(this.channel);
+                } catch {
+                    reject();
+                }
+            });
+        }
+    }
+
+    class MockChannel {
+        constructor() {
+            this.sent = false;
+        }
+
+        send(msg) {
+            this.sent = true;
+        }
+    }
+
+
+
+    const pendingMsgs = new PendingMessages(new MockClient(new MockChannel()), process.env.REMINDER_CHANNEL_ID);
     /**
      * Deleted the reminder.
      * @param {number|string} id The ID.
@@ -77,7 +105,26 @@ describe("Checks whether the Reminder class works correctly.", () => {
         expect(pendingMsgs.getReminderIds()).to.not.include(timeOutReminder.getId());
     });
 
-    it("Should trigger message after interval.");
+    it("Should trigger message after interval.", function (done) {
+        const testChannel = new MockChannel();
+        const pendingMsgs = new PendingMessages(new MockClient(testChannel), 'mockId');
+        const in5s = new Date();
+        in5s.setSeconds(in5s.getSeconds() + 5);
+
+        const reminderIn5s = new Reminder({
+            id: 1234,
+            members: ["321", "123"],
+            time: in5s
+        });
+
+        pendingMsgs.add(reminderIn5s);
+        this.timeout(6000); // sets new maximum timeout time
+        setTimeout(() => {
+            expect(testChannel.sent).to.be.true;
+            done(); // For later: is parameter of test function.
+        }, 5000);
+        
+    });
 
     it("Should correctly write the reminder to disk.", () => {
         const toBeSavedReminder = new Reminder({

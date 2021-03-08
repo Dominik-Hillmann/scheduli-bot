@@ -18,6 +18,8 @@ console.log(process.env.TOKEN);
 console.log(parseDate('The fourth of Jul 1776'));
 
 import { Controller } from "./controller/Controller.js";
+import { PendingMessages } from "./model/PendingMessages.js";
+import { Reminder } from "./model/Reminder.js";
 
 client.on('ready', () => {
     // let prescence = new 
@@ -36,7 +38,7 @@ client.on('ready', () => {
     });
 
 
-    const controller = new Controller();
+    // const controller = new Controller();
     // controller.test();
 
 
@@ -64,12 +66,12 @@ client.on('message', msg => {
 
     for (let id of msg.mentions.members.keys()) {
         console.log(id);
-        msg.channel.send(`<@${id}>`)
+        msg.channel.send(`<@${id}>`);
     }
     
 
     msg.pin('Einfach so');
-    msg.react('📌')
+    msg.react('📌');
     msg.channel.send('Das ist ein Test');
 
     const controller = new Controller();
@@ -103,22 +105,22 @@ client.on('message', msg => {
 
 
     const id = msg.channel.id;
-    client.channels.fetch(id);
-    console.log("Nachricht", msg.channel.id);
-    console.log("ID", id);
-    client.channels.fetch(id).then(channel => console.log("Fetch", channel.id));
+    // client.channels.fetch(id);
+    // console.log("Nachricht", msg.channel.id);
+    // console.log("ID", id);
+    // client.channels.fetch(id).then(channel => console.log("Fetch", channel.id));
     // console.log("Fetch", chan);
+    const pendingMsgs = new PendingMessages(client, id);
+    const now = new Date();
+    const timeIn10s = new Date();
+    timeIn10s.setSeconds(now.getSeconds() + 300);
 
-
-
-
-
-
-
-
-
-
-    
+    const reminder = new Reminder({
+        id: 123, 
+        members: ['708349298391253052', '687942614766452748'], 
+        time: timeIn10s
+    });
+    pendingMsgs.add(reminder);    
     
 });
 
