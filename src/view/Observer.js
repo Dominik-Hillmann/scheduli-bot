@@ -10,7 +10,7 @@ export class Observer {
     constructor() {
         this.latestReminderNames = undefined;
         this.latestTaskNames = undefined;
-        this.latestTasks = undefined;
+        this.latestTasks = [];
         this.previouslyObserved = false;
 
         this.remindersDir = "./data/reminders/";
@@ -26,7 +26,8 @@ export class Observer {
             
             this.latestReminderNames = fs.readdirSync(this.remindersDir);
 
-
+        } else {
+            
         }
 
         // ...
@@ -37,7 +38,16 @@ export class Observer {
      * 
      * @returns {{newTasks:string[],changedTasks:string[],newReminders:string[]}}
      */
-    getDifference() {
+    getDifferenceTaskFiles() {
 
+    }
+
+
+    getDifferenceTasks() {
+
+    }
+
+    getDifferenceReminderFiles() {
+        
     }
 }

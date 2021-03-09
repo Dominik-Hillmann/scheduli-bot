@@ -151,9 +151,7 @@ describe("Correct functionality of the CommandInterpreter class.", () => {
             expect(() => handler.handle(testMsgWithGibberish)).to.throw(TypeError);
         });
 
-        // Wird mit der Implementierung von des Reminders genutzt.
-        it("Should give information about currently pending reminders.");
-        /*it("Should give information about currently pending reminders.", () => {
+        it("Should give information about currently pending reminders.", () => {
             const testMsg = new TestMessage(prefix + " list reminders");
             const testMsgWithSpace = new TestMessage("   " + testMsg.content + "   ");
             const testMsgWithGibberish = new TestMessage(testMsg.content + "sads dsadsa");
@@ -161,7 +159,7 @@ describe("Correct functionality of the CommandInterpreter class.", () => {
             expect(handler.handle(testMsg)).to.be.instanceOf(MessageEmbed);
             expect(handler.handle(testMsgWithSpace)).to.be.instanceOf(MessageEmbed);
             expect(() => handler.handle(testMsgWithGibberish)).to.throw(TypeError);
-        });*/
+        });
 
         it("Should give information about currently pending PlanningTasks.", () => {
             const testMsg = new TestMessage(prefix + " list tasks");

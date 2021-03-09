@@ -5,6 +5,7 @@ const { parseDate } = chronoPkg;
 
 import { PlanningTask } from "../model/PlanningTask.js";
 import { TimeFrame } from "../model/TimeFrame.js";
+import { Reminder } from "../model/Reminder.js";
 
 /**
  * @class Takes the strings of the message and calls the correct `Controller` 
@@ -14,14 +15,14 @@ export class CommandInterpreter {
     /**
      * The `CommandInterpreter` constructor.
      * @param {import('../controller/Controller.js').Controller} controller The 
-     * controller that orchestrates the model classes. 
+     * controller that manipulates the model classes. 
      * @param {string} prefix The string with which a command to the scheduli
      * bot has to start. 
      */
     constructor(controller, prefix = "!scheduli") {
         this.controller = controller;
         this.prefix = prefix;
-        this.embedColor = "#eb4034";
+        this.embedColor = "#8af542";
     }
 
     /**
@@ -43,7 +44,6 @@ export class CommandInterpreter {
         let restCommand = command.slice(this.prefix.length);
         restCommand = this.removePrecedingWhiteSpace(restCommand);
         restCommand = this.removeTrailingWhiteSpace(restCommand);
-        
 
         if (restCommand === "list commands") {
             return this.getCommandList();
@@ -128,6 +128,15 @@ export class CommandInterpreter {
     }
 
     /**
+     * Prepends a zero to a number if < 10.
+     * @param {number} n The number to which zero will potentially be prepended.
+     * @returns {string} Potentially prepended number.
+     */
+    prependZero(n) {
+        return n < 10 ? `0${n}` : `${n}`;
+    }    
+
+    /**
      * Get the command list.
      * @returns {MessageEmbed} The embedded message listing the commands.
      */
@@ -147,7 +156,32 @@ export class CommandInterpreter {
     }
 
     getReminderList() {
-        // to be implemented when the Reminder class is implemented.
+        const remindersDirName = "./data/reminders/";
+        const reminderFileNames = fs.readdirSync(remindersDirName);
+        return new MessageEmbed()
+            .setColor(this.embedColor)
+            .setTitle("Reminders")
+            .setDescription("A list of currently pending reminders.")
+            .addFields(reminderFileNames.map(fileName => {
+                const reminder = Reminder.fromJson(fileName);
+                const membersMentions = reminder.getMembers()
+                    .map(member => member.getMention())
+                    .join(", ");
+
+                const date = reminder.getTime().toDateString();
+                const time = `${this.prependZero(reminder.getTime().getHours())}:${this.prependZero(reminder.getTime().getMinutes())}`;
+                const dateTime = `${date}, ${time}.`;
+
+                return {
+                    name: `Reminder #${reminder.getId()}`,
+                    value: `${membersMentions} on ${dateTime}`,
+                    inline: true
+                };
+            }))
+            .setFooter(
+                "You can delete any of these reminders using the command !scheduli del reminder <ID>.\n" +
+                "For example use \"!scheduli del reminder 24\" to delete the reminder using ID 24."
+            );
     }
 
     /**

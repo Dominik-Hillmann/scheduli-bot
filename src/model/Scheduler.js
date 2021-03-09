@@ -1,10 +1,7 @@
-// import { TimeFrame } from './TimeFrame.js'
-
 /**
  * @class Calculates overlapping time frames.
  */
-export class Scheduler {
-    
+export class Scheduler {    
     /**
      * Constructor the the scheduler.
      * @param {Map<string, import('./TimeFrame').TimeFrame[]>} userSchedules 

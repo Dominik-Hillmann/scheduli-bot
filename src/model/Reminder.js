@@ -49,6 +49,7 @@ export class Reminder {
         const timeoutId = setTimeout((client, targetChannelId) => {
             client.channels.fetch(targetChannelId).then(channel => {
                 const reminderMsg = new MessageEmbed()
+                .setColor("#8af542")
                 .setTitle("Reminder")
                 .setDescription("You have an upcoming meeting.")
                 .addFields(this.members.map(member => ({
@@ -85,15 +86,6 @@ export class Reminder {
 
     static getCurrentTimeUnix() {
         return parseInt((new Date().getTime() / 1000).toFixed(0));
-    }
-
-    /**
-     * 
-     * @param {import('discord.js')} client Der Client, mit dem die Nachricht
-     * gesendet werden kann.
-     */
-    sendReminderMessage(client) {
-
     }
 
     /**
@@ -156,5 +148,12 @@ export class Reminder {
      */
     getTime() {
         return this.time;
+    }
+
+    /**
+     * Deletes the JSON file belonging to this reminder.
+     */
+    deleteJson() {        
+        fs.unlinkSync(`./data/reminders/${this.id}.json`);
     }
 }

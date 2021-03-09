@@ -1,5 +1,6 @@
 // require('dotenv').config();
 import dotenv from "dotenv";
+import yaml from "js-yaml";
 dotenv.config()
 
 // const fs = require('fs');
@@ -15,11 +16,13 @@ import chronoPkg from 'chrono-node';
 const { parseDate } = chronoPkg;
 
 console.log(process.env.TOKEN);
-console.log(parseDate('The fourth of Jul 1776'));
+console.log(parseDate('The fourth of Jul'));
 
 import { Controller } from "./controller/Controller.js";
 import { PendingMessages } from "./model/PendingMessages.js";
 import { Reminder } from "./model/Reminder.js";
+
+const appConfig = yaml.load(fs.readFileSync('config.yaml'));
 
 client.on('ready', () => {
     // let prescence = new 
@@ -69,10 +72,8 @@ client.on('message', msg => {
         msg.channel.send(`<@${id}>`);
     }
     
-
     msg.pin('Einfach so');
     msg.react('📌');
-    msg.channel.send('Das ist ein Test');
 
     const controller = new Controller();
     const interpreter = new CommandInterpreter(controller);
@@ -83,6 +84,8 @@ client.on('message', msg => {
     } catch (e) {
         if (e instanceof TypeError) {
             msg.reply(e.message);
+        } else {
+            console.log(e);
         }
     }
 
@@ -110,10 +113,10 @@ client.on('message', msg => {
     // console.log("ID", id);
     // client.channels.fetch(id).then(channel => console.log("Fetch", channel.id));
     // console.log("Fetch", chan);
-    const pendingMsgs = new PendingMessages(client, id);
+    const pendingMsgs = new PendingMessages(client, appConfig.channel);
     const now = new Date();
     const timeIn10s = new Date();
-    timeIn10s.setSeconds(now.getSeconds() + 300);
+    timeIn10s.setSeconds(now.getSeconds() + 10);
 
     const reminder = new Reminder({
         id: 123, 

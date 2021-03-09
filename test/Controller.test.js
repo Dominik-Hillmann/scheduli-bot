@@ -5,9 +5,11 @@ import { Controller } from "../src/controller/Controller.js";
 import { PlanningTask } from "../src/model/PlanningTask.js";
 import { FileNotFoundError } from "../src/model/FileNotFoundError.js";
 import { TimeFrame } from "../src/model/TimeFrame.js";
+import { Reminder } from "../src/model/Reminder.js";
 
 describe("Checking for functionality of the controller class.", () => {
     const taskPath = "./data/tasks/";
+    const reminderPath = "./data/reminders/";
 
     let controller;
     beforeEach(() => controller = new Controller());
@@ -95,9 +97,25 @@ describe("Checking for functionality of the controller class.", () => {
         });
     });
 
-    describe("Reminder deletion:", () => {
-        it("Should delete a given reminder.");
+    describe("Instant reminder creation.", () => {
+        it("Should create a reminder on command without prior matching of time frames and activate the timeout.");
+    });
 
-        it("Should throw an exception if the reminder ID does not exist.");
+    describe("Reminder deletion:", () => {
+        it("Should delete a given reminder.", () => {
+            const id = 999999999;
+            new Reminder({
+                id: id,
+                members: ["123", "321"],
+                time: new Date(2022, 3, 4)
+            }).toJson();
+            expect(fs.readdirSync(reminderPath)).to.include(`${id}.json`);
+            controller.deleteReminder(id);
+            expect(fs.readdirSync(reminderPath)).to.not.include(`${id}.json`);
+        });
+
+        it("Should throw an exception if the reminder ID does not exist.", () => {
+            expect(() => controller.deleteReminder("101010101010101.json")).to.throw(FileNotFoundError);
+        });
     });
 });

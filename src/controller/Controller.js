@@ -2,6 +2,7 @@ import { PlanningTask } from '../model/PlanningTask.js';
 import { FileNotFoundError } from "../model/FileNotFoundError.js";
 import fs from "fs";
 import { DiscordUser } from '../model/DiscordUser.js';
+import { Reminder } from '../model/Reminder.js';
 
 /**
  * @class Interacts with the model on behalf of what happens in the view.
@@ -10,6 +11,7 @@ export class Controller {
     constructor() {
         /** The path to the saved `PlanningTask`s. */
         this.tasksDir =  "./data/tasks/";
+        this.remindersDir = "./data/reminders/";
     }
 
     /**
@@ -71,7 +73,14 @@ export class Controller {
      * @param {number} id The reminder ID.
      */
     deleteReminder(id) {
-
+        const remindersFileNames = fs.readdirSync(this.remindersDir);
+        const reminderName = `${id}.json`;
+        if (!remindersFileNames.includes(reminderName)) {
+            throw new FileNotFoundError(this.remindersDir + reminderName);
+        }
+        
+        const reminder = Reminder.fromJson(`${id}.json`);
+        reminder.deleteJson();
     }
 
     setReminders() {

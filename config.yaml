@@ -1,0 +1,7 @@
+# The ID of the Discord channel to which reminders will be sent.
+channel: "818252773769478173"
+# The language with which users will interact with the bot.
+# Possible are all of chrono's language codes: en, ja, fr. de and pt partially. 
+language: "en"
+
+# TODO: language change needs to be implemented.

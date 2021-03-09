@@ -8,52 +8,78 @@ dotenv.config()
 import { PendingMessages } from "../src/model/PendingMessages.js";
 import { Reminder } from "../src/model/Reminder.js";
 
+const remindersDir = "./data/reminders/";
+
+const testReminder = new Reminder({
+    id: 1,
+    time: 1614722506,
+    members: ["123", "312", "987"]
+});
+
+/**
+ * @class A mock-up of the Discord client.
+ */
+class MockClient {
+    /**
+     * The constructor.
+     * @param {MockChannel} channel The channel to which message is sent.
+     */
+    constructor(channel) {
+        this.channels = new MockChannelManager(channel); 
+    }
+}
+
+/**
+ * @class A mock-up of the Discord channel manager.
+ */
+class MockChannelManager {
+    /**
+     * The constructor.
+     * @param {MockChannel} channel The channel to which message is sent.
+     */
+    constructor(channel) {
+        this.channel = channel;
+    }
+    
+    /**
+     * Get the channel the message will be sent to.
+     * @param {string} id The channel ID.
+     * @returns {Promise<MockChannel>} A promise of the channel.
+     */
+    fetch(id) {
+        return new Promise((resolve, reject) => {
+            try {
+                resolve(this.channel);
+            } catch {
+                reject();
+            }
+        });
+    }
+}
+
+/**
+ * @class A mock-up of the channel.
+ */
+class MockChannel {
+    /**
+     * The constructor.
+     */
+    constructor() {
+        this.sent = false;
+    }
+
+    /**
+     * Sends the message. 
+     * @param {string} msg Sends the message to the channel and sets `sent` to be `true`.
+     */
+    send(msg) {
+        this.sent = true;
+    }
+}
+
+const pendingMsgs = new PendingMessages(new MockClient(new MockChannel()), process.env.REMINDER_CHANNEL_ID);
 
 describe("Checks whether the Reminder class works correctly.", () => {
-    const remindersDir = "./data/reminders/";
-
-    const testReminder = new Reminder({
-        id: 1,
-        time: 1614722506,
-        members: ["123", "312", "987"]
-    });
-
-
-    class MockClient {
-        constructor(channel) {
-            this.channels = new MockChannelManager(channel); 
-        }
-    }
-
-    class MockChannelManager {
-        constructor(channel) {
-            this.channel = channel;
-        }
-        
-        fetch(id) {
-            return new Promise((resolve, reject) => {
-                try {
-                    resolve(this.channel);
-                } catch {
-                    reject();
-                }
-            });
-        }
-    }
-
-    class MockChannel {
-        constructor() {
-            this.sent = false;
-        }
-
-        send(msg) {
-            this.sent = true;
-        }
-    }
-
-
-
-    const pendingMsgs = new PendingMessages(new MockClient(new MockChannel()), process.env.REMINDER_CHANNEL_ID);
     /**
      * Deleted the reminder.
      * @param {number|string} id The ID.
