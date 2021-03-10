@@ -10,14 +10,20 @@ import { TimeFrame } from "../src/model/TimeFrame.js";
 
 describe("Check for functionality of PlanningTask class.", () => { // describe für Gruppierungen von Tests
     const testId = 9999899;
-    const extractionTestFrame = new TimeFrame({ start: new Date("2021-05-05T21:21:00.000Z"), end: new Date("2021-05-05T23:21:00.000Z") });
+    const extractionTestFrame = new TimeFrame({ 
+        start: new Date("2021-05-05T21:21:00.000Z"), 
+        end: new Date("2021-05-05T23:21:00.000Z")
+    });
     const writeTask = new PlanningTask({
         id: testId,
         members: [ new DiscordUser("123"), new DiscordUser("321") ],
         timeFrames: [[ 
-                extractionTestFrame,
-                new TimeFrame({ start: new Date("2021-05-06T21:21:00.000Z"), end: new Date("2021-05-06T23:21:00.000Z") })
-            ], []
+            extractionTestFrame,
+            new TimeFrame({ 
+                start: new Date("2021-05-06T21:21:00.000Z"), 
+                end: new Date("2021-05-06T23:21:00.000Z") 
+            })], 
+            []
         ]
     });
 

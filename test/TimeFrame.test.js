@@ -80,4 +80,17 @@ describe("Check for functionality of the TimeFrame class.", () => {
         expect(frame1.intersect(frame4)).to.eql(new TimeFrame({ start: 400, end: 400 }));
         expect(frame2.intersect(frame4)).to.be.null;
     });
+
+    it("Should correctly say whether it has the same start and end as another frame.", () => {
+        const baseFrame = new TimeFrame({ start: 300, end: 400 });
+        const sameFrame = new TimeFrame({ start: 300, end: 400 });
+        const diffFrameStart = new TimeFrame({ start: 200, end: 400 });
+        const diffFrameEnd = new TimeFrame({ start: 300, end: 500});
+        const diffFrameBoth = new TimeFrame({ start: 200, end: 500 });
+
+        expect(baseFrame.haveSameStartEnd(sameFrame)).to.be.true;
+        expect(baseFrame.haveSameStartEnd(diffFrameStart)).to.be.false;
+        expect(baseFrame.haveSameStartEnd(diffFrameEnd)).to.be.false;
+        expect(baseFrame.haveSameStartEnd(diffFrameBoth)).to.be.false;
+    });
 });

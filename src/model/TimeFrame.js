@@ -77,6 +77,17 @@ export class TimeFrame {
     }
 
     /**
+     * Says whether the two frames have the same start and end.
+     * @param {TimeFrame} otherFrame The frame compared to.
+     * @return {boolean} `true`, if the same.
+     */
+    haveSameStartEnd(otherFrame) {
+        const startSame = this.getStartUnix() === otherFrame.getStartUnix();
+        const endSame = this.getEndUnix() === otherFrame.getEndUnix();
+        return startSame && endSame;
+    }
+
+    /**
      * Get the intersection between this `TimeFrame` and another `TimeFrame`.
      * @param {TimeFrame} otherFrame The time frame with which to intersect.
      * @returns {TimeFrame|null} The intersection.
